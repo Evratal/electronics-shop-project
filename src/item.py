@@ -33,6 +33,12 @@ class Item:
         self.price = self.price * Item.pay_rate
         return self.price
 
+    def __str__(self):
+        return f"{self.name}"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
+
     @property
     def name(self):
         """Геттер.Возвращает имя"""

@@ -27,3 +27,10 @@ def test_instantiate_from_csv():
 
 def test_string_to_number():
     assert Item.string_to_number("100") == 100
+
+nout_1 = Item("Ноутбуки", 20000, 100)
+def test_str():
+    assert str(nout_1) == 'Ноутбуки'
+
+def test_repr():
+    assert repr(nout_1) == "Item('Ноутбуки', 20000, 100)"
