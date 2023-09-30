@@ -25,12 +25,21 @@ def test_instantiate_from_csv():
     assert new_item.price == 100
     assert new_item.quantity == 1
 
+
 def test_string_to_number():
     assert Item.string_to_number("100") == 100
 
+
 nout_1 = Item("Ноутбуки", 20000, 100)
+
+
 def test_str():
     assert str(nout_1) == 'Ноутбуки'
 
+
 def test_repr():
     assert repr(nout_1) == "Item('Ноутбуки', 20000, 100)"
+
+
+def test_add():
+    assert nout_1 + nout == 200

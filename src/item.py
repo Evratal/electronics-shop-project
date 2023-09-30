@@ -17,6 +17,7 @@ class Item:
         self.__name = name
         self.price = price
         self.quantity = quantity
+        super().__init__()
 
     def calculate_total_price(self) -> float:
         """
@@ -48,7 +49,7 @@ class Item:
     def instantiate_from_csv(cls,number):
         with open("../src/items.csv", encoding="utf-8") as file:
             dict_csv = csv.DictReader(file)
-            """Переводи все данные из csv файла в удобный для работы список"""
+
             dict_used = []
             for el in dict_csv:
                 dict_used.append(el)
@@ -78,3 +79,9 @@ class Item:
             self.__name = name
         else:
             self.__name = name[:10]
+
+    def __add__(self, other):
+        if not isinstance(other, Item):
+            raise ValueError('Складывать можно только Item и дочерние от них Phone.')
+        return int(self.quantity) + int(other.quantity)
+
