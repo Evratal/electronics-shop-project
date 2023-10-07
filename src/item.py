@@ -1,4 +1,7 @@
 import csv
+import os.path
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -47,7 +50,7 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls,number):
-        with open("../src/items.csv", encoding="utf-8") as file:
+        with open(os.path.join("src","items.csv"), encoding="utf-8") as file:
             dict_csv = csv.DictReader(file)
 
             dict_used = []
