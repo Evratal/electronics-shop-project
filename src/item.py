@@ -1,5 +1,7 @@
 import csv
-import os.path
+
+
+from src.instantiateCSVError import InstantiateCSVError
 
 
 class Item:
@@ -8,6 +10,8 @@ class Item:
     """
     pay_rate = 1.0
     all = []
+
+    path_file = "../src/items.csv"
 
     def __init__(self, name: str, price: float, quantity: int):
         """
@@ -20,6 +24,7 @@ class Item:
         self.__name = name
         self.price = price
         self.quantity = quantity
+        self.path_file = self.path_file
         super().__init__()
 
     def calculate_total_price(self) -> float:
@@ -49,31 +54,39 @@ class Item:
         return self.__name
 
     @classmethod
-    def instantiate_from_csv(cls,number):
-        with open(os.path.join("src","items.csv"), encoding="utf-8") as file:
-            dict_csv = csv.DictReader(file)
+    def instantiate_from_csv(cls, number=1, path=path_file):
+        """Открываем файл и проверяем на его"""
+        try:
+            with open(path, encoding="utf-8") as file:
 
-            dict_used = []
-            for el in dict_csv:
-                dict_used.append(el)
+                dict_csv = csv.DictReader(file)
+                len_field_dict = len(dict_csv.fieldnames)
+                dict_used = [] #создаем словарь, куда будем записывать строчки из файла, для дальнешй с ними работы
+                if len_field_dict !=3:
+                    raise InstantiateCSVError('InstantiateCSVError: Файл item.csv поврежден')
+                for el in dict_csv:
+                    dict_used.append(el)
 
-            """С помощью number выбираем товар из списка (проверяем, чтобы номер не выходил за список)"""
+                    """С помощью number выбираем товар из списка (проверяем, чтобы номер не выходил за список)"""
 
-            if number < 1 or number > 5:
-                number = 1
-            name = dict_used[number-1]["name"]
-            price = int(dict_used[number-1]["price"])
-            quantity = int(dict_used[number-1]["quantity"])
+                    if number < 1 or number > 5:
+                        number = 1
+                    name = dict_used[number - 1]["name"]
+                    price = int(dict_used[number - 1]["price"])
+                    quantity = int(dict_used[number - 1]["quantity"])
 
-            return cls(name, price, quantity)
-
-
+        except FileNotFoundError:
+            print("FileNotFoundError: Отсутствует файл item.csv")
+            raise
+        except InstantiateCSVError:
+            print('InstantiateCSVError: Файл item.csv поврежден')
+            raise
+        return cls(name, price, quantity)
 
     @staticmethod
     def string_to_number(string):
         number = int(string)
         return number
-
 
     @name.setter
     def name(self, name):
@@ -87,4 +100,3 @@ class Item:
         if not isinstance(other, Item):
             raise ValueError('Складывать можно только Item и дочерние от них Phone.')
         return int(self.quantity) + int(other.quantity)
-
